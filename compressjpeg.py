@@ -34,8 +34,11 @@ def compress_image(path):
     """Replaces given image with same image at quality 75
     """
     with Image.open(path) as img:
-        org_info = img.info
-        img.save(path, quality=75, exif=org_info['exif'])
+        exif_dict = img.info.get("exif")
+        if exif_dict:
+            img.save(path, quality=75, exif=exif_dict)
+        else:
+            img.save(path, quality=75)
 
 def get_files_in_directory(path):
     """Returns the root files at the given path. Does not look in subdirs
